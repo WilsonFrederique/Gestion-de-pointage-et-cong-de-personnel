@@ -18,19 +18,10 @@ Route::get('/', function () {
     return view('base');
 });
 
-Route::get('/employes', [EmployeController::class, 'index'])->name('app_employe');
+Route::prefix('admin')->name('admin.')->group(function() {
+    Route::resource('employes', EmployeController::class);
+});
 
-Route::get('/ajoutEmploye', function () {
-    return view('CRUD.ajoutEmploye');
-})->name('app_create');
-
-Route::get('/pointage', function () {
-    return view('home.pointage');
-})->name('app_pointage');
-
-Route::get('/conge', function () {
-    return view('home.conge');
-})->name('app_conge');
 
 
 // Route::controller(EmployeController::class)->group(function () {

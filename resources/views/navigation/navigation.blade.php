@@ -9,20 +9,20 @@
         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
 
           <li class="nav-item">
-            <a class="nav-link active" aria-current="page" href="{{ route('app_employe') }}">Employes</a>
+            <a class="nav-link active" aria-current="page" href="{{ route('admin.employes.index') }}">Employes</a>
           </li>
 
           <li class="nav-item">
-            <a class="nav-link active" aria-current="page" href="{{ route('app_pointage') }}">Pointage</a>
+            <a class="nav-link active" aria-current="page" href="">Pointage</a>
           </li>
 
           <li class="nav-item">
-            <a class="nav-link active" aria-current="page" href="{{ route('app_conge') }}">Coge</a>
+            <a class="nav-link active" aria-current="page" href="">Coge</a>
           </li>
 
       </div>
       <form class="d-flex">
-        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+        <input class="form-control me-2" type="search" placeholder="Recherche..." aria-label="Search">
         <button class="btn btn-outline-success" type="submit">Rechercher</button>
       </form>
     </div>
