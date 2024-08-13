@@ -1,7 +1,7 @@
 
-<nav class="navbar navbar-expand-lg navbar-light bg-light">
+<nav class="navbar navbar-expand-lg navbar-light bg-dark text-white">
     <div class="container">
-      <a class="navbar-brand" href="#">GESTION DE POINTAGE</a>
+      <a class="navbar-brand text-white" href="#">GESTION DE POINTAGE</a>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
@@ -13,11 +13,11 @@
           </li>
 
           <li class="nav-item">
-            <a class="nav-link active" aria-current="page" href="">Pointage</a>
+            <a class="nav-link active" aria-current="page" href="{{ route('admin.pointages.index') }}">Pointage</a>
           </li>
 
           <li class="nav-item">
-            <a class="nav-link active" aria-current="page" href="">Coge</a>
+            <a class="nav-link active" aria-current="page" href="{{ route('admin.conges.index') }}">Coge</a>
           </li>
 
       </div>

@@ -1,2 +1,15 @@
 /* ============ CSS VIEN DANS LA BOOTSTRAP ============ */
 @import "lib/bootstrap/css/bootstrap.css";
+
+
+.navbar.bg-dark .navbar-nav .nav-link {
+    color: rgb(170, 162, 162) !important;
+}
+
+body{
+    background: rgb(23, 27, 37);
+}
+
+a{
+    text-decoration: none;
+}

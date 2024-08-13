@@ -3,7 +3,7 @@
 @section('title', $employe->exists ? "MODIFICATION EMPLOYE" : "AJOUT EMPLOYE")
 
 @section('container')
-    <form class="mx-auto col-4 mt-5" method="POST" action="{{ $employe->exists ? route('admin.employes.update', $employe->numEmp) : route('admin.employes.store') }}">
+    <form class="mx-auto col-4 mt-5  text-secondary" method="POST" action="{{ $employe->exists ? route('admin.employes.update', $employe->numEmp) : route('admin.employes.store') }}">
 
         @csrf
 

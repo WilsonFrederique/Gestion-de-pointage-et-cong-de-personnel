@@ -2,7 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\CongeFormRequest;
+use App\Models\Conge;
+use App\Models\Employe;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class CongeController extends Controller
 {
@@ -11,7 +15,10 @@ class CongeController extends Controller
      */
     public function index()
     {
-        //
+        // Requête Select * From employe
+        $conges = DB::table('conges')->get();
+
+        return view('admin.conge.index', ['conges' => $conges]);
     }
 
     /**
@@ -19,15 +26,25 @@ class CongeController extends Controller
      */
     public function create()
     {
-        //
+        $conge = new Conge();
+        return view('admin.conge.form', compact('conge'));
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(CongeFormRequest $request)
     {
-        //
+        try {
+            $congeData = $request->validated();
+
+            DB::table('conges')->insert($congeData);
+
+            return to_route('admin.conges.index');
+
+        } catch(\Throwable $th) {
+            return redirect()->back();
+        }
     }
 
     /**
@@ -41,17 +58,23 @@ class CongeController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit(Conge $conge)
     {
-        //
+        return view('admin.conge.form', [
+            'conge' => $conge
+        ]);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(CongeFormRequest $request, string $numConge)
     {
-        //
+        DB::table('conges')
+            ->where('numConge', $numConge)
+            ->update($request->validated());
+
+        return to_route('admin.conges.index');
     }
 
     /**

@@ -48,6 +48,7 @@ class EmployeController extends Controller
             DB::table('employes')->insert($employeData);
 
             return to_route('admin.employes.index');
+
         } catch(\Throwable $th) {
             return redirect()->back();
         }

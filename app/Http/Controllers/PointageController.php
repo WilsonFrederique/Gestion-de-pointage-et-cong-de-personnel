@@ -2,7 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\PointageFormRequest;
+use App\Models\Pointage;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class PointageController extends Controller
 {
@@ -11,7 +14,10 @@ class PointageController extends Controller
      */
     public function index()
     {
-        //
+        // Requête Select * From employe
+        $pointages = DB::table('pointages')->get();
+
+        return view('admin.pointage.index', ['pointages' => $pointages]);
     }
 
     /**
@@ -19,15 +25,25 @@ class PointageController extends Controller
      */
     public function create()
     {
-        //
+        $pointage = new Pointage();
+        return view('admin.pointage.form', compact('pointage'));
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(PointageFormRequest $request)
     {
-        //
+        try {
+            $pointageData = $request->validated();
+
+            DB::table('pointages')->insert($pointageData);
+
+            return to_route('admin.pointages.index');
+
+        } catch(\Throwable $th) {
+            return redirect()->back();
+        }
     }
 
     /**
@@ -41,17 +57,23 @@ class PointageController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit(Pointage $pointage)
     {
-        //
+        return view('admin.pointage.form', [
+            'pointage' => $pointage
+        ]);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(PointageFormRequest $request, string $pointage)
     {
-        //
+        DB::table('pointages')
+            ->where('pointage', $pointage)
+            ->update($request->validated());
+
+        return to_route('admin.pointages.index');
     }
 
     /**

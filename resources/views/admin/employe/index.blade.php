@@ -8,32 +8,32 @@
 
         <div class="mb-4">
             <button type="button" class="btn btn-primary">
-                <a href="{{ route('admin.employes.create') }}">AJOUTER</a>
+                <a class="text-white" href="{{ route('admin.employes.create') }}">AJOUTER</a>
             </button>
         </div>
 
         <table class="table table-striped table-hover">
             <thead>
-                <tr>
-                    <th>ID Employe</th>
-                    <th>Nom</th>
-                    <th>Prenom</th>
-                    <th>Poste</th>
-                    <th>Salaire</th>
+                <tr class="text-white">
+                    <th>ID EMPLOYE</th>
+                    <th>NOM</th>
+                    <th>PRENOM</th>
+                    <th>POSTE</th>
+                    <th>SALAIRE</th>
                 </tr>
             </thead>
             <tbody>
                 @foreach ($employes as $employe)
                     <tr class="table-active">
-                        <th>{{ $employe->numEmp }}</th>
-                        <th>{{ $employe->Nom }}</th>
-                        <th>{{ $employe->Prenom }}</th>
-                        <th>{{ $employe->poste }}</th>
-                        <th>{{ $employe->salaire }}</th>
+                        <th class="text-secondary">{{ $employe->numEmp }}</th>
+                        <th class="text-secondary">{{ $employe->Nom }}</th>
+                        <th class="text-secondary">{{ $employe->Prenom }}</th>
+                        <th class="text-secondary">{{ $employe->poste }}</th>
+                        <th class="text-secondary">{{ $employe->salaire }}</th>
                         <th>
 
                             <div class="d-flex justify-content-center gap-3">
-                                <button type="button" class="btn btn-success"><a href="{{ route('admin.employes.edit', $employe->numEmp) }}">Modifier</a></button>
+                                <button type="button" class="btn btn-success"><a class="text-white" href="{{ route('admin.employes.edit', $employe->numEmp) }}">Modifier</a></button>
 
                                 <button type="button" class="btn btn-danger">Supprimer</button>
                             </div>

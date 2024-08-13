@@ -1,6 +1,8 @@
 <?php
 
+use App\Http\Controllers\CongeController;
 use App\Http\Controllers\EmployeController;
+use App\Http\Controllers\PointageController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -22,7 +24,13 @@ Route::prefix('admin')->name('admin.')->group(function() {
     Route::resource('employes', EmployeController::class);
 });
 
+Route::prefix('admin')->name('admin.')->group(function() {
+    Route::resource('pointages', PointageController::class);
+});
 
+Route::prefix('admin')->name('admin.')->group(function() {
+    Route::resource('conges', CongeController::class);
+});
 
 // Route::controller(EmployeController::class)->group(function () {
 //     Route::get('/home/employes', 'index');
