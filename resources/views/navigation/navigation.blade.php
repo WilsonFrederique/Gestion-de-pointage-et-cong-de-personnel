@@ -1,7 +1,7 @@
 
 <nav class="navbar navbar-expand-lg navbar-light bg-dark text-white">
     <div class="container">
-      <a class="navbar-brand text-white" href="#">GESTION DE POINTAGE</a>
+      <a class="navbar-brand text-white" href="{{ route('Accuel') }}">GESTION DE POINTAGE</a>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
@@ -21,9 +21,28 @@
           </li>
 
       </div>
-      <form class="d-flex">
-        <input class="form-control me-2" type="search" placeholder="Recherche..." aria-label="Search">
-        <button class="btn btn-outline-success" type="submit">Rechercher</button>
-      </form>
+        <div id="Admin" class="d-flex justify-content-end">
+
+            <div class="btn-group">
+                <button type="button" class="btn btn-dark">Admin</button>
+                <button type="button" class="btn btn-dark dropdown-toggle dropdown-toggle-split" data-bs-toggle="dropdown" aria-expanded="false">
+                    <span class="visually-hidden">Toggle Dropdown</span>
+                </button>
+
+                <ul class="dropdown-menu">
+                    <form action="{{ route('auth.logout') }}" method="POST">
+                        @csrf
+                        @method('delete')
+                        <li><button type="submit" class="dropdown-item" href="#">Deconnecter</button></li>
+                    </form>
+                </ul>
+            </div>
+
+            <form class="d-flex">
+                <input name="Rechercher" class="form-control me-2" type="search" placeholder="Recherche ....." aria-label="Search">
+                <button class="btn btn-outline-success" type="submit">Rechercher</button>
+            </form>
+
+        </div>
     </div>
   </nav>

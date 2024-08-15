@@ -6,10 +6,12 @@
 
     <div class="mx-auto col-11 mt-3">
 
-        <div class="mb-4">
+        <div class="d-flex justify-content-between align-items-center mb-4">
             <button type="button" class="btn btn-primary">
-                <a class="text-white" href="{{ route('admin.conges.create') }}">AJOUTER</a>
+                <a class="text-white text-decoration-none" href="{{ route('admin.conges.create') }}">AJOUTER</a>
             </button>
+
+            <h1 class="custom-h1">LISTE DES CONGE</h1>
         </div>
 
         <table class="table table-striped table-hover">
@@ -35,7 +37,15 @@
                             <div class="d-flex justify-content-center gap-3">
                                 <button type="button" class="btn btn-success"><a class="text-white" href="{{ route('admin.conges.edit', $conge->numConge) }}">Modifier</a></button>
 
-                                <button type="button" class="btn btn-danger">Supprimer</button>
+                                <form action="{{ route('admin.conges.destroy', $conge->numConge) }}" method="POST">
+
+                                    @csrf
+
+                                    @method('delete')
+
+                                    <button type="submit" class="btn btn-danger">Supprimer</button>
+
+                                </form>
                             </div>
 
                         </th>

@@ -12,12 +12,60 @@ class EmployeController extends Controller
     /**
      * Display a listing of the resource. ( Zan hoe : Affichage eto )
      */
-    public function index()
+    public function index(Request $request)
     {
-        // Requête Select * From employe
-        $employes = DB::table('Employes')->get();
+        // Hanao requête amn employe
+        $employes = Employe::query();
 
-        return view('admin.employe.index', ['employes' => $employes]);
+        if($Recherche = $request->Rechercher) {
+            $employes->where('numEmp', 'LIKE', '%' . $Recherche . '%')
+                ->orWhere('Nom', 'LIKE', '%' . $Recherche . '%')
+                ->orWhere('Prenom', 'LIKE', '%' . $Recherche . '%');
+        }
+
+
+        // Amn'io get io no maka anle requête
+        return view('admin.employe.index', ['employes' => $employes->get()]);
+
+    }
+
+    public function listes(Request $request)
+    {
+        // Récupérer les employés dont les numéros sont présents dans la table des congés
+        $query1 = DB::table('conges')->select('numEmp');
+
+        // Récupérer les employés dont les numéros sont présents dans la liste récupérée
+        $query2 = DB::table('employes')
+            ->whereIn('numEmp', $query1);
+
+        if($Recherche = $request->Rechercher) {
+            $query2->where('numEmp', 'LIKE', '%' . $Recherche . '%')
+                ->orWhere('Nom', 'LIKE', '%' . $Recherche . '%')
+                ->orWhere('Prenom', 'LIKE', '%' . $Recherche . '%');
+        }
+
+        // Retourner la vue avec les employés concernés
+        return view('admin.listes.listesEC', ['query2s' => $query2->get()]);
+
+    }
+
+    public function listesENC(Request $request)
+    {
+        // Récupérer les employés dont les numéros sont présents dans la table des congés
+        $query1 = DB::table('conges')->select('numEmp');
+
+        // Récupérer les employés dont les numéros sont présents dans la liste récupérée
+        $query2 = DB::table('employes')
+            ->whereNotIn('numEmp', $query1);
+
+        if($Recherche = $request->Rechercher) {
+            $query2->where('numEmp', 'LIKE', '%' . $Recherche . '%')
+                ->orWhere('Nom', 'LIKE', '%' . $Recherche . '%')
+                ->orWhere('Prenom', 'LIKE', '%' . $Recherche . '%');
+        }
+
+        // Retourner la vue avec les employés concernés
+        return view('admin.listes.listesENC', ['query2s' => $query2->get()]);
 
     }
 
@@ -55,11 +103,16 @@ class EmployeController extends Controller
     }
 
     /**
-     * Display the specified resource.
+     * Display the specified resource. (Zan hoe : Pour la profils ito)
      */
-    public function show(string $id)
+    public function show(string $numEmp)
     {
-        //
+        $employe = DB::table('employes')
+            ->where('numEmp', $numEmp)
+            ->first();
+
+        return view('admin.employe.profil', ['employe' => $employe]);
+
     }
 
     /**
@@ -88,8 +141,18 @@ class EmployeController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(string $numEmp)
     {
-        //
+        $deleted = DB::table('employes')
+                ->where('numEmp', $numEmp)
+                ->delete();
+
+        if ($deleted) {
+            // Si la suppression a réussi
+            return redirect()->back()->with('success', 'Employé supprimé avec succès.');
+        } else {
+            // Si la suppression a échoué
+            return redirect()->back()->with('error', 'Erreur lors de la suppression de l\'employé.');
+        }
     }
 }

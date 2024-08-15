@@ -3,13 +3,18 @@
 @section('title', $pointage->exists ? "MODIFICATION POINTAGE" : "AJOUT POINTAGE")
 
 @section('container')
-    <form class="mx-auto col-4 mt-5  text-secondary" method="POST" action="{{ $pointage->exists ? route('admin.pointages.update', $pointage->pointage) : route('admin.pointages.store') }}">
+    <form class="mx-auto col-4 mt-5  text-secondary" method="POST" action="{{ $pointage->exists ? route('admin.pointages.update', $pointage->id) : route('admin.pointages.store') }}">
 
         @csrf
 
         @if ($pointage->exists)
             @method('PUT')
         @endif
+
+        <div class="mb-3" style="display: none">
+            <label for="exampleInputEmail1" class="form-label">ID</label>
+            <input type="text" class="form-control" value="{{ $pointage->id }}" id="id" name="id">
+        </div>
 
         <div class="mb-3">
         <label for="exampleInputEmail1" class="form-label">Date Pointage</label>
@@ -22,8 +27,11 @@
         </div>
 
         <div class="mb-3">
-        <label for="exampleInputPassword1" class="form-label">Pointage</label>
-        <input type="text" class="form-control" value="{{ $pointage->pointage }}" id="pointage" name="pointage">
+            <label for="pointage" class="form-label">Pointage</label>
+            <select class="form-control" id="pointage" name="pointage">
+                <option value="Oui" {{ $pointage->pointage == 'Oui' ? 'selected' : '' }}>Oui</option>
+                <option value="Non" {{ $pointage->pointage == 'Non' ? 'selected' : '' }}>Non</option>
+            </select>
         </div>
 
         <button type="submit" class="btn btn-primary">

@@ -12,12 +12,44 @@ class PointageController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        // Requête Select * From employe
-        $pointages = DB::table('pointages')->get();
+        // Hanao requête amn employe
+        $pointages = Pointage::query();
 
-        return view('admin.pointage.index', ['pointages' => $pointages]);
+        if($Recherche = $request->Rechercher) {
+            $pointages->where('id', 'LIKE', '%' . $Recherche . '%')
+                ->orWhere('numEmp', 'LIKE', '%' . $Recherche . '%')
+                ->orWhere('pointage', 'LIKE', '%' . $Recherche . '%');
+        }
+
+        if($Date = $request->DateRecherche) {
+            $pointages->where('datePointage', 'LIKE', '%' . $Date . '%');
+        }
+
+        return view('admin.pointage.index', ['pointages' => $pointages->get()]);
+    }
+
+    // Pointage presence
+    public function presence(Request $request){
+        $presences = Pointage::query()->where('pointage', 'Oui');
+
+        if($Date = $request->DateRecherche) {
+            $presences->where('datePointage', 'LIKE', '%' . $Date . '%');
+        }
+
+        return view('admin.pointage.presence', ['presences' => $presences->get()]);
+    }
+
+    // Pointage absence
+    public function absence(Request $request){
+        $presences = Pointage::query()->where('pointage', 'Non');
+
+        if($Date = $request->DateRecherche) {
+            $presences->where('datePointage', 'LIKE', '%' . $Date . '%');
+        }
+
+        return view('admin.pointage.absence', ['presences' => $presences->get()]);
     }
 
     /**
@@ -35,9 +67,9 @@ class PointageController extends Controller
     public function store(PointageFormRequest $request)
     {
         try {
-            $pointageData = $request->validated();
+            $congeData = $request->validated();
 
-            DB::table('pointages')->insert($pointageData);
+            DB::table('pointages')->insert($congeData);
 
             return to_route('admin.pointages.index');
 
@@ -67,10 +99,10 @@ class PointageController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(PointageFormRequest $request, string $pointage)
+    public function update(PointageFormRequest $request, string $id)
     {
         DB::table('pointages')
-            ->where('pointage', $pointage)
+            ->where('id', $id)
             ->update($request->validated());
 
         return to_route('admin.pointages.index');
@@ -81,6 +113,9 @@ class PointageController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $deleted = DB::table('pointages')
+            ->where('id', $id)
+            ->delete();
+        return redirect()->back();
     }
 }

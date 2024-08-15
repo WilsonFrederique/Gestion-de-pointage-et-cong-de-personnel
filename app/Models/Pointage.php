@@ -8,11 +8,12 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Pointage extends Model
 {
-    // ================= Primary Key =====================
-    protected $primaryKey = 'pointage';
+    // // ================= Primary Key =====================
+    // protected $primaryKey = 'idP';
 
-    // ================= Type Primary Key ================
-    protected $keyType = 'string';
+    // protected $keyType = 'string';
+
+    // protected $incrementing = true;
 
     // ===== One to Many Inverse : (0,1) ou (1,1) ========
     public function employes(): BelongsTo
@@ -22,6 +23,7 @@ class Pointage extends Model
 
     // ================ Autorise au saisie ===============
     protected $fillable = [
+        'idP',
         'datePointage',
         'numEmp',
         'pointage'

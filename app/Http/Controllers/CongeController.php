@@ -13,12 +13,19 @@ class CongeController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        // Requête Select * From employe
-        $conges = DB::table('conges')->get();
 
-        return view('admin.conge.index', ['conges' => $conges]);
+        // Hanao requête amn employe
+        $conges = Conge::query();
+
+        if($Recherche = $request->Rechercher) {
+            $conges->where('numConge', 'LIKE', '%' . $Recherche . '%')
+                ->orWhere('numEmp', 'LIKE', '%' . $Recherche . '%')
+                ->orWhere('motif', 'LIKE', '%' . $Recherche . '%');
+        }
+
+        return view('admin.conge.index', ['conges' => $conges->get()]);
     }
 
     /**
@@ -35,16 +42,35 @@ class CongeController extends Controller
      */
     public function store(CongeFormRequest $request)
     {
+
         try {
             $congeData = $request->validated();
+
+            // Récupérer l'année en cours
+            $currentYear = date('Y');
+
+            // Calculer le nombre total de jours de congé pris par l'employé pour l'année en cours
+            $totalJoursConges = DB::table('conges')
+                ->where('numEmp', $congeData['numEmp'])
+                ->whereYear('dateDemande', $currentYear)
+                ->sum('nbrjr');
+
+            // Ajouter les jours de congé du nouveau congé
+            $totalJoursConges += $congeData['nbrjr'];
+
+            // Vérifier que le nombre total de jours ne dépasse pas 30
+            if ($totalJoursConges > 30) {
+                return redirect()->back()->withErrors(['nbrjr' => 'Le nombre total de jours de congé pour l\'année ne peut pas dépasser 30 jours.']);
+            }
 
             DB::table('conges')->insert($congeData);
 
             return to_route('admin.conges.index');
 
-        } catch(\Throwable $th) {
-            return redirect()->back();
+        } catch (\Throwable $th) {
+            return redirect()->back()->withErrors(['error' => 'Une erreur est survenue.']);
         }
+
     }
 
     /**
@@ -69,19 +95,64 @@ class CongeController extends Controller
      * Update the specified resource in storage.
      */
     public function update(CongeFormRequest $request, string $numConge)
-    {
-        DB::table('conges')
-            ->where('numConge', $numConge)
-            ->update($request->validated());
+{
+    $congeData = $request->validated();
 
-        return to_route('admin.conges.index');
+    // Récupérer l'année en cours
+    $currentYear = date('Y');
+
+    // Verification pour jours disponible de conge
+    $TJC = DB::table('conges')
+        ->where('numEmp', $congeData['numEmp'])
+        ->whereYear('dateDemande', $currentYear)
+        ->sum('nbrjr');
+
+    $disponibles = 30 - $TJC;
+
+    // Calculer le nombre total de jours de congé pris par l'employé pour l'année en cours
+    $totalJoursConges = DB::table('conges')
+        ->where('numEmp', $congeData['numEmp'])
+        ->whereYear('dateDemande', $currentYear)
+        ->sum('nbrjr');
+
+    // Trouver le congé actuel pour obtenir le nombre de jours avant modification
+    $currentConge = DB::table('conges')
+        ->where('numConge', $numConge)
+        ->first();
+
+    // Si le congé actuel existe, soustraire ses jours du total actuel
+    if ($currentConge) {
+        $totalJoursConges -= $currentConge->nbrjr;
     }
+
+    // Calculer le nombre de jours restant jusqu'à atteindre 30 jours
+    $joursRestants = 30 - $totalJoursConges;
+
+    // Vérifier si le nombre de jours demandés dépasse les jours restants
+    if ($congeData['nbrjr'] > $joursRestants) {
+        return redirect()->back()->withErrors([
+            'nbrjr' => 'Le nombre total de jours de congé pour l\'année ne peut pas dépasser 30 jours. Il reste ' . $disponibles . ' jour(s) disponible(s).'
+        ]);
+    }
+
+    // Mettre à jour le congé
+    DB::table('conges')
+        ->where('numConge', $numConge)
+        ->update($congeData);
+
+    return to_route('admin.conges.index')->with('success', 'Le congé a été mis à jour avec succès.');
+}
+
+
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(string $numConge)
     {
-        //
+        $deleted = DB::table('conges')
+            ->where('numConge', $numConge)
+            ->delete();
+        return redirect()->back();
     }
 }
