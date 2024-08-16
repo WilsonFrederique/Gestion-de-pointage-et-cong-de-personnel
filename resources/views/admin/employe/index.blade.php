@@ -11,6 +11,10 @@
                 <a class="btn btn-primary" href="{{ route('admin.employes.create') }}">AJOUTER</a>
             </div>
 
+            {{-- <div class="btn-group">
+                <a class="btn btn-primary" href="{{ route('admin.listes_profils') }}">PROFIL</a>
+            </div> --}}
+
             <div class="d-flex gap-2"> <!-- Flex container for gap management -->
                 <div class="btn-group gat-btn-ec p-1">
                     <a class="btn btn-primary custom-ec" href="{{ route('admin.listes') }}">LISTE DES EMPLOYÉS EN CONGÉ</a>
@@ -32,6 +36,7 @@
                     <th>PRENOM</th>
                     <th>POSTE</th>
                     <th>SALAIRE</th>
+                    <th>IMAGE</th>
                 </tr>
             </thead>
             <tbody>
@@ -42,6 +47,9 @@
                         <th class="text-secondary">{{ $employe->Prenom }}</th>
                         <th class="text-secondary">{{ $employe->poste }}</th>
                         <th class="text-secondary">{{ $employe->salaire }}</th>
+                        <th class="text-secondary">
+                            <img class="img" src="{{ asset($employe->images) }}" alt="Image de l'employé">
+                        </th>
                         <th>
 
                             <div class="d-flex justify-content-center gap-3">

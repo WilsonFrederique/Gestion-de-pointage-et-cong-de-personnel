@@ -43,6 +43,9 @@ Route::prefix('admin')->name('admin.')->middleware('auth')->group(function() {
     // Ajout de la route pour la méthode listesENC
     Route::get('listes.non.conge', [EmployeController::class, 'listesENC'])->name('listes_non_conge');
 
+    // Ajout de la route pour la méthode listeProfils
+    Route::get('listes.profils', [EmployeController::class, 'indexProfil'])->name('listes_profils');
+
 
     Route::resource('pointages', PointageController::class);
 

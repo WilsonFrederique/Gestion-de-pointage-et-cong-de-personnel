@@ -29,6 +29,16 @@ class EmployeController extends Controller
 
     }
 
+    public function indexProfil(Request $request)
+    {
+        // Hanao requête amn employe
+        $employes = Employe::query()->get();
+
+        // Amn'io get io no maka anle requête
+        return view('admin.employe.toutProfil', ['employes' => $employes]);
+
+    }
+
     public function listes(Request $request)
     {
         // Récupérer les employés dont les numéros sont présents dans la table des congés
@@ -83,24 +93,53 @@ class EmployeController extends Controller
      * dia le required ny installena igny , Commande install anaz : php artisan make:request EmployeFormRequest
      * , Afaka ovaovaina le anarana fa tsy voatery ho EmployeFormRequest)
      */
+
+    //  Eto iz mbola tss sary
+
+    // public function store(EmployeFormRequest $request)
+    // {
+    //     try {
+    //         $employeData = $request->validated();
+    //         // dd($employeData);
+
+    //         // Eto le requête insert :
+    //         // $employe = Employe::create($employeData);
+
+    //         // 2em Méthode pour le requête insert :
+    //         DB::table('employes')->insert($employeData);
+
+    //         return to_route('admin.employes.index');
+
+    //     } catch(\Throwable $th) {
+    //         return redirect()->back();
+    //     }
+    // }
+
+    //  Eto iz efa misy sary
+
     public function store(EmployeFormRequest $request)
     {
         try {
             $employeData = $request->validated();
-            // dd($employeData);
 
-            // Eto le requête insert :
-            // $employe = Employe::create($employeData);
+            // Gestion du fichier image
+            if ($request->hasFile('images')) {
+                $file = $request->file('images');
+                $filename = time() . '_' . $file->getClientOriginalName(); // Crée un nom unique pour le fichier
+                $file->move(public_path('images'), $filename); // Déplace le fichier dans le dossier public/images
+                $employeData['images'] = 'images/' . $filename; // Enregistre le chemin de l'image dans la base de données
+            }
 
-            // 2em Méthode pour le requête insert :
+            // Insertion des données dans la table employes
             DB::table('employes')->insert($employeData);
 
-            return to_route('admin.employes.index');
+            return to_route('admin.employes.index')->with('success', 'Employé ajouté avec succès!');
 
-        } catch(\Throwable $th) {
-            return redirect()->back();
+        } catch (\Throwable $th) {
+            return redirect()->back()->with('error', 'Une erreur s\'est produite. Veuillez réessayer.');
         }
     }
+
 
     /**
      * Display the specified resource. (Zan hoe : Pour la profils ito)
@@ -121,7 +160,7 @@ class EmployeController extends Controller
      */
     public function edit(Employe $employe)
     {
-        return view('admin.employe.form', [
+        return view('admin.employe.modForm', [
             'employe' => $employe
         ]);
     }
@@ -129,6 +168,7 @@ class EmployeController extends Controller
     /**
      * Update the specified resource in storage. ( Zan hoe : Modification eto )
      */
+
     public function update(EmployeFormRequest $request, string $numEmp)
     {
         DB::table('employes')
@@ -137,6 +177,7 @@ class EmployeController extends Controller
 
         return to_route('admin.employes.index');
     }
+
 
     /**
      * Remove the specified resource from storage.

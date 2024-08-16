@@ -17,6 +17,7 @@ return new class extends Migration
             $table->string('Prenom');
             $table->string('poste');
             $table->integer('salaire');
+            $table->string('images');
             $table->timestamps();
         });
 

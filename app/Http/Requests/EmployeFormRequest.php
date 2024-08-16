@@ -27,7 +27,8 @@ class EmployeFormRequest extends FormRequest
             'Nom' => ['required'],
             'Prenom' => ['required'],
             'poste' => ['required'],
-            'salaire' => ['required', 'integer', 'min:100000']
+            'salaire' => ['required', 'integer', 'min:100000'],
+            // 'images' => ['required']
         ];
     }
 
@@ -40,7 +41,8 @@ class EmployeFormRequest extends FormRequest
             'poste.required' => 'Poste employe récquis.',
             'salaire.required' => 'Salaire employe récquis.',
             'salaire.integer' => 'Salaire doit être nombre.',
-            'salaire.min' => 'Salaire doit être 100000 minimum.'
+            'salaire.min' => 'Salaire doit être 100000 minimum.',
+            'images' => 'images employe récquis.'
         ];
     }
 }

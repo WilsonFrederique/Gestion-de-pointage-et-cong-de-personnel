@@ -172,3 +172,14 @@ a{
     margin-right: 3px; /* Adjust this if needed to ensure a 2-unit gap */
 }
 
+.img {
+    width: 30px;
+    height: 30px;
+    object-fit: cover;
+    border-radius: 50%;
+}
+
+#imgActuelle {
+    max-width: 50px;
+    max-height: 50px;
+}
