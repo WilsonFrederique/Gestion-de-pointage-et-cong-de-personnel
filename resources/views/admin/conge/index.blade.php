@@ -31,7 +31,7 @@
                         <th class="text-secondary">{{ $conge->numEmp }}</th>
                         <th class="text-secondary">{{ $conge->motif }}</th>
                         <th class="text-secondary">{{ $conge->nbrjr }}</th>
-                        <th class="text-secondary">{{ $conge->dateDemande }}</th>
+                        <td class="text-secondary">{{ \Carbon\Carbon::parse($conge->dateDemande)->format('d-m-Y') }}</td>
                         <th>
 
                             <div class="d-flex justify-content-center gap-3">

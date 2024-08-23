@@ -24,9 +24,20 @@
             <input type="text" class="form-control" value="{{ old('numConge', $conge->numConge) }}" id="numConge" name="numConge">
         </div>
 
-        <div class="mb-3">
+        {{-- <div class="mb-3">
             <label for="numEmp" class="form-label">ID Employé</label>
             <input type="text" class="form-control" value="{{ old('numEmp', $conge->numEmp) }}" id="numEmp" name="numEmp">
+        </div> --}}
+
+        <div class="mb-3">
+            <label for="numEmp" class="form-label">ID Employé</label>
+            <select class="form-control" id="numEmp" name="numEmp">
+                @foreach($employes as $employe)
+                    <option value="{{ $employe->numEmp }}" {{ $employe->numEmp == $conge->numEmp ? 'selected' : '' }}>
+                        {{ $employe->numEmp }}
+                    </option>
+                @endforeach
+            </select>
         </div>
 
         <div class="mb-3">

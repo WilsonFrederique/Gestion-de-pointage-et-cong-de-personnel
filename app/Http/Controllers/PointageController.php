@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\PointageFormRequest;
+use App\Models\Employe;
 use App\Models\Pointage;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use App\Http\Requests\PointageFormRequest;
 
 class PointageController extends Controller
 {
@@ -17,6 +18,9 @@ class PointageController extends Controller
         // Hanao requête amn employe
         $pointages = Pointage::query();
 
+        // Récupérer les employés pour la liste déroulante
+        $employes = Employe::all();
+
         if($Recherche = $request->Rechercher) {
             $pointages->where('id', 'LIKE', '%' . $Recherche . '%')
                 ->orWhere('numEmp', 'LIKE', '%' . $Recherche . '%')
@@ -27,7 +31,10 @@ class PointageController extends Controller
             $pointages->where('datePointage', 'LIKE', '%' . $Date . '%');
         }
 
-        return view('admin.pointage.index', ['pointages' => $pointages->get()]);
+        return view('admin.pointage.index', [
+                    'pointages' => $pointages->get(),
+                    'employes' => $employes // Passer la liste des employés à la vue
+                ]);
     }
 
     // Pointage presence
@@ -58,7 +65,9 @@ class PointageController extends Controller
     public function create()
     {
         $pointage = new Pointage();
-        return view('admin.pointage.form', compact('pointage'));
+        $employes = Employe::all(); // Récupérer les employés
+
+        return view('admin.pointage.form', compact('pointage', 'employes'));
     }
 
     /**
@@ -91,9 +100,10 @@ class PointageController extends Controller
      */
     public function edit(Pointage $pointage)
     {
-        return view('admin.pointage.form', [
-            'pointage' => $pointage
-        ]);
+
+        $employes = Employe::all(); // Récupérer les employés
+
+        return view('admin.pointage.form', compact('pointage', 'employes'));
     }
 
     /**

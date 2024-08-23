@@ -30,6 +30,9 @@
             </div>
         </div>
 
+        {{-- Inclusion du formulaire --}}
+        {{-- @include('admin.pointage.form', ['employes' => $employes]) --}}
+
         <table class="table table-striped table-hover">
             <thead>
                 <tr class="text-white">
@@ -43,7 +46,7 @@
                 @foreach ($pointages as $pointage)
                     <tr class="table-active">
                         <th class="text-secondary">{{ $pointage->id }}</th>
-                        <th class="text-secondary">{{ $pointage->datePointage }}</th>
+                        <td class="text-secondary">{{ \Carbon\Carbon::parse($pointage->datePointage)->format('d-m-Y') }}</td>
                         <th class="text-secondary">{{ $pointage->numEmp }}</th>
                         <th class="text-secondary">{{ $pointage->pointage }}</th>
                         <th>

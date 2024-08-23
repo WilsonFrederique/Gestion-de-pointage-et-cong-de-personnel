@@ -19,13 +19,18 @@ class CongeController extends Controller
         // Hanao requête amn employe
         $conges = Conge::query();
 
+        $employes = Employe::all(); // Récupérer les employés
+
         if($Recherche = $request->Rechercher) {
             $conges->where('numConge', 'LIKE', '%' . $Recherche . '%')
                 ->orWhere('numEmp', 'LIKE', '%' . $Recherche . '%')
                 ->orWhere('motif', 'LIKE', '%' . $Recherche . '%');
         }
 
-        return view('admin.conge.index', ['conges' => $conges->get()]);
+        return view('admin.conge.index', [
+                    'conges' => $conges->get(),
+                    'employes' => $employes
+                ]);
     }
 
     /**
@@ -34,7 +39,9 @@ class CongeController extends Controller
     public function create()
     {
         $conge = new Conge();
-        return view('admin.conge.form', compact('conge'));
+        $employes = Employe::all(); // Récupérer les employés
+
+        return view('admin.conge.form', compact('conge', 'employes'));
     }
 
     /**
@@ -86,9 +93,13 @@ class CongeController extends Controller
      */
     public function edit(Conge $conge)
     {
-        return view('admin.conge.form', [
-            'conge' => $conge
-        ]);
+        $employes = Employe::all(); // Récupérer les employés
+
+        return view('admin.conge.form', compact('conge', 'employes'));
+
+        // return view('admin.conge.form', [
+        //     'conge' => $conge
+        // ]);
     }
 
     /**
